@@ -2,10 +2,9 @@
 
 class Student:  #This is the class 'student'
 
-    def __init__(self,fname, lname, age, attendance): #Initialization
+    def __init__(self,fname, lname, attendance): #Initialization
             self.fname = fname
             self.lname = lname
-            self.age = age
             self.attendance = attendance
             
     def get_name(self):
