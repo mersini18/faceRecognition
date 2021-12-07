@@ -34,7 +34,8 @@ def remove_stu(stu):
 stu_1 = Student("Daniel", "Trowbridge", 100)
 stu_2 = Student("Abdou", "Naji", 63)
 
-
+insert_stu(stu_1)
+insert_stu(stu_2)
 
 students = get_stu_by_name('Naji')
 print(students)

@@ -2,13 +2,13 @@
 
 class Student:  #This is the class 'student'
 
-    def __init__(self,fname, lname, attendance): #Initialization
-            self.fname = fname
-            self.lname = lname
+    def __init__(self,first, last, attendance): #Initialization
+            self.first = first
+            self.last = last
             self.attendance = attendance
             
     def get_name(self):
-        return (self.fname , self.lname)
+        return (self.first , self.last)
 
     def get_attendance(self):
         return self.attendance
