@@ -72,6 +72,24 @@ class Create_user:
     def backButton(self):
         self.main.destroy()
 
+
+    def load_createdUser(self):
+        self.newWindow = tk.Toplevel(self.main)
+        self.newWindow.geometry('1440x900')
+        self.newWindow.title('Success')
+        self.newWindow.grab_set()
+        self.app = Created(self.newWindow)
+
+    def load_usernameFail(self):
+        self.newWindow = tk.Toplevel(self.main)
+        self.newWindow.geometry('1440x900')
+        self.newWindow.title('Create user failed')
+        self.newWindow.grab_set()
+        self.app = usernameFail(self.newWindow)
+
+    def load_passwordFail(self):
+        pass
+
     def verify(self):
         username = self.username_entry.get()
         password = self.password_entry.get()
@@ -79,24 +97,51 @@ class Create_user:
         self.username_entry.delete(0,END)
         self.password_entry.delete(0,END)
 
-        reg_password =  "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,18}$"
-        reg_username = "^[A-Za-z][A-Za-z0-9_.-]{7,29}$"
+        # reg_password =  "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,18}$"
+        # reg_username = "^[A-Za-z][A-Za-z0-9_.-]{7,29}$"
         
-        match_re_username = re.compile(reg_username)
-        match_re_password = re.compile(reg_password)
+        # match_re_username = re.compile(reg_username)
+        # match_re_password = re.compile(reg_password)
         
+        if re.match('^(?![-._])(?!.*[_.-]{2})[\w.-]{6,30}(?<![-._])$', username):
+            specialSym =['$', '@', '#', '%']
+            val = True
         
-        print(username, password)
+            if len(password) < 6:
+                print('length should be at least 6')
+                val = False
+            
+            if len(password) > 20:
+                    
+                print('length should be not be greater than 8')
+                val = False
+            
+            if not any(char.isdigit() for char in password):
+                print('Password should have at least one numeral')
+                val = False
+                
+            if not any(char.isupper() for char in password):
+                print('Password should have at least one uppercase letter')
+                val = False
+                
+            if not any(char.islower() for char in password):
+                print('Password should have at least one lowercase letter')
+                val = False
+                
+            if not any(char in specialSym for char in password):
+                print('Password should have at least one of the symbols: $, @, #, %')
+                val = False
+            if val:
+                self.load_createdUser()
+            else:
+                self.load_passwordFail()
+                
+        else:
+            self.load_usernameFail()
 
 
+        
 
-    def load_createdUser(self):
-        print(self.username_entry, self.password_entry)
-        self.newWindow = tk.Toplevel(self.main)
-        self.newWindow.geometry('1440x900')
-        self.newWindow.title('Success')
-        self.newWindow.grab_set()
-        self.app = Created(self.newWindow)
 
 class Created:
         
@@ -113,6 +158,22 @@ class Created:
     
     def backButton(self):
         self.main.destroy()
+
+class usernameFail:
+
+    def __init__(self,main):
+        self.main = main
+        self.frame = Frame(self.main)
+        self.frame.pack()
+
+        self.label1 = Label(self.main, text='Username is too long/short! \nMust be between 4-20', font=('Arial', 36))
+        self.label1.pack()
+
+        self.back_button = Button(self.main, text='Ok', width='50', height='2', command = self.backButton)            
+        self.back_button.pack()
+
+    def backButton(self):
+        self.main.destroy()  
 
 if __name__ == "__main__":
     root = Tk()
