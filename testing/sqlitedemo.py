@@ -1,5 +1,5 @@
 import sqlite3
-from testing.students import Student
+from students import Student
 
 conn = sqlite3.connect('student.db')
 

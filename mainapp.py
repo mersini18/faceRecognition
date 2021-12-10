@@ -98,8 +98,10 @@ class Create_user_frame:
         self.app = passwordFail_frame(self.newWindow)
 
     def createNew(self, username, password):
+
+        password = hash(password)
         newUser = User(username, password)
-        newUser.get_username()
+        newUser.get_info()
 
     def verify(self):
         username = self.username_entry.get()
@@ -115,28 +117,21 @@ class Create_user_frame:
             val = True
         
             if len(password) < 6:
-                print('length should be at least 6')
                 val = False
             
             if len(password) > 20:
-                    
-                print('length should be not be greater than 8')
                 val = False
             
             if not any(char.isdigit() for char in password):
-                print('Password should have at least one numeral')
                 val = False
                 
             if not any(char.isupper() for char in password):
-                print('Password should have at least one uppercase letter')
                 val = False
                 
             if not any(char.islower() for char in password):
-                print('Password should have at least one lowercase letter')
                 val = False
                 
             if not any(char in specialSym for char in password):
-                print('Password should have at least one of the symbols: $, @, #, %')
                 val = False
 
             if val:
@@ -209,8 +204,8 @@ class User:
         self.username = username
         self.password = password
         
-    def get_username(self):
-        print(self.username)
+    def get_info(self):
+        print(self.username, self.password)
 
     def addUser(self):
         #add user to database
