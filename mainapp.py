@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import *
 import re
+import sqlite3
+
 
 class Main_window:
 
@@ -14,7 +16,7 @@ class Main_window:
         self.label1 = Label(self.frame, text='Choose an option:' , bg = 'lightblue' , font = ('Arial', 16), width='1440',height='2')
         self.label1.pack()
 
-        self.button1 = Button(self.frame, text='Create an account', width='100' , height = '4' , command=self.load_createUser)
+        self.button1 = Button(self.frame, text='Create an account', width='100' , height = '4' , command=self.load_createUser_frame)
         self.button1.pack()
 
         self.button2 = Button(self.frame, text='Log in', width = '100', height='4' , command=self.login_user)
@@ -23,19 +25,20 @@ class Main_window:
         self.quit_button = Button(self.frame, text='Quit', width='100', height='4', command=self.frame.quit)
         self.quit_button.pack()
 
-    def load_createUser(self):
+    def load_createUser_frame(self):
 
         self.newWindow =  tk.Toplevel(self.main)
         self.newWindow.geometry('1440x900')
         self.newWindow.title('Register Account')
         self.newWindow.grab_set()
-        self.app = Create_user(self.newWindow)
+        self.app = Create_user_frame(self.newWindow)
         
     
     def login_user(self):
         pass
 
-class Create_user:
+
+class Create_user_frame:
 
     def __init__(self, main):
 
@@ -73,22 +76,30 @@ class Create_user:
         self.main.destroy()
 
 
-    def load_createdUser(self):
+    def load_createdUser_frame(self):
         self.newWindow = tk.Toplevel(self.main)
         self.newWindow.geometry('1440x900')
         self.newWindow.title('Success')
         self.newWindow.grab_set()
-        self.app = Created(self.newWindow)
+        self.app = Created_frame(self.newWindow)
 
-    def load_usernameFail(self):
+    def load_usernameFail_frame(self):
         self.newWindow = tk.Toplevel(self.main)
-        self.newWindow.geometry('1440x900')
+        self.newWindow.geometry('300x200')
         self.newWindow.title('Create user failed')
         self.newWindow.grab_set()
-        self.app = usernameFail(self.newWindow)
+        self.app = usernameFail_frame(self.newWindow)
 
-    def load_passwordFail(self):
-        pass
+    def load_passwordFail_frame(self):
+        self.newWindow = tk.Toplevel(self.main)
+        self.newWindow.geometry('300x200')
+        self.newWindow.title('Create user failed')
+        self.newWindow.grab_set()
+        self.app = passwordFail_frame(self.newWindow)
+
+    def createNew(self, username, password):
+        newUser = User(username, password)
+        newUser.get_username()
 
     def verify(self):
         username = self.username_entry.get()
@@ -96,13 +107,9 @@ class Create_user:
 
         self.username_entry.delete(0,END)
         self.password_entry.delete(0,END)
-
-        # reg_password =  "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,18}$"
-        # reg_username = "^[A-Za-z][A-Za-z0-9_.-]{7,29}$"
-        
-        # match_re_username = re.compile(reg_username)
-        # match_re_password = re.compile(reg_password)
-        
+    
+    
+      
         if re.match('^(?![-._])(?!.*[_.-]{2})[\w.-]{6,30}(?<![-._])$', username):
             specialSym =['$', '@', '#', '%']
             val = True
@@ -131,19 +138,18 @@ class Create_user:
             if not any(char in specialSym for char in password):
                 print('Password should have at least one of the symbols: $, @, #, %')
                 val = False
+
             if val:
-                self.load_createdUser()
+                self.createNew(username, password)
+                self.load_createdUser_frame()
             else:
-                self.load_passwordFail()
+                self.load_passwordFail_frame()
                 
         else:
-            self.load_usernameFail()
+            self.load_usernameFail_frame()
 
 
-        
-
-
-class Created:
+class Created_frame:
         
     def __init__(self,main):
         self.main = main
@@ -159,7 +165,8 @@ class Created:
     def backButton(self):
         self.main.destroy()
 
-class usernameFail:
+
+class usernameFail_frame:
 
     def __init__(self,main):
         self.main = main
@@ -174,6 +181,41 @@ class usernameFail:
 
     def backButton(self):
         self.main.destroy()  
+
+
+class passwordFail_frame:
+
+    def __init__(self,main):
+        self.main = main
+        self.frame = Frame(self.main)
+        self.frame.pack()
+
+        self.label1 = Label(self.main, text ='Invalid Password!', fg='red', font=('Arial', 16))
+        self.label1.pack()
+
+        self.label2 = Label(self.main, text = 'Should contain at least: \n\n1) One cpital letter \n2) One special sharacter \n3) One number \n4) Length Should be 8-18: ')
+        self.label2.pack()
+
+        self.back_button = Button(self.main, text='Ok', width='50', height='2', command = self.backButton)
+        self.back_button.pack()
+
+    def backButton(self):
+        self.main.destroy()
+
+
+class User:
+
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+        
+    def get_username(self):
+        print(self.username)
+
+    def addUser(self):
+        #add user to database
+        pass
+
 
 if __name__ == "__main__":
     root = Tk()

@@ -1,15 +1,15 @@
 import sqlite3
-from students import Student
+from testing.students import Student
 
 conn = sqlite3.connect('student.db')
 
 c = conn.cursor()
 
-# c.execute("""CREATE TABLE students (
-#             first text,
-#             last text,
-#             attendance integer
-#             )""")   
+c.execute("""CREATE TABLE students (
+            first text,
+            last text,
+            attendance integer
+            )""")   
 
 def insert_stu(stu):
     with conn:
