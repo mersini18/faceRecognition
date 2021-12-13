@@ -46,7 +46,6 @@ class Create_user_frame:
         self.main = main
         self.frame = Frame(self.main)
         self.frame.pack()
-        self.python_image = tk.PhotoImage(main, file='bg.png')
 
         self.label1 = Label(self.main, text = 'Enter details below:', font = ('Arial', 20), width = '720', height = '4', bg = 'lightblue')
         self.label1.pack()
