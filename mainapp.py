@@ -20,7 +20,7 @@ class Main_window:
         self.button1 = Button(self.frame, text='Create an account', width='100' , height = '4' , command=self.load_createUser_frame)
         self.button1.pack()
 
-        self.button2 = Button(self.frame, text='Log in', width = '100', height='4' , command=self.login_user)
+        self.button2 = Button(self.frame, text='Log in', width = '100', height='4' , command=self.load_loginUser_frame)
         self.button2.pack()
 
         self.quit_button = Button(self.frame, text='Quit', width='100', height='4', command=self.frame.quit)
@@ -32,14 +32,78 @@ class Main_window:
         self.newWindow.geometry('1440x900')
         self.newWindow.title('Register Account')
         self.newWindow.grab_set()
-        self.app = Create_user_frame(self.newWindow)
+        self.app = Create_user(self.newWindow)
         
     
-    def login_user(self):
-        pass
+    def load_loginUser_frame(self):
+        self.newWindow = tk.Toplevel(self.main)
+        self.newWindow.geometry('1440x900')
+        self.newWindow.title('Login')
+        self.newWindow.grab_set()
+        self.app = Login_user(self.newWindow)
 
 
-class Create_user_frame:
+class Login_user:
+    
+    def __init__(self, main):
+        self.main = main
+        self.frame = Frame(self.main)
+        self.frame.pack()
+
+        self.label1 = Label(self.main, text = 'Enter details below:', font = ('Arial', 20), width = '720', height = '4', bg = 'lightblue')
+        self.label1.pack()
+
+        self.label2 = Label(self.main, text = '')
+        self.label2.pack()
+
+        self.label3 = Label(self.main, text='Username *', fg = 'red')
+        self.label3.pack()
+
+        self.username = StringVar()
+        self.username_entry = Entry(self.main, textvariable=self.username, bg = 'lightgrey')
+        self.username_entry.pack()
+
+        self.label4 = Label(self.main, text='Password *' ,fg= 'red', )
+        self.label4.pack()
+
+        self.password = StringVar()
+        self.password_entry = Entry(self.main, textvariable=self.password, show = '*', bg='lightgrey')
+        self.password_entry.pack()
+
+        self.button1 = Button(self.main, text='Login', command = self.loginUser)
+        self.button1.pack()
+
+        self.back_button = Button(self.main, text='Back', command = self.backButton)
+        self.back_button.pack()
+    
+    def backButton(self):
+        self.main.destroy()
+
+    def loginUser(self):
+        username = self.username_entry.get()
+        password = self.password_entry.get()
+
+        self.username_entry.delete(0,END)
+        self.password_entry.delete(0,END)
+
+        conn = sqlite3.connect('program_database.db')
+        c = conn.cursor()
+        with conn:
+            c.execute("SELECT * FROM users")
+            result = c.fetchall()
+
+        login = (username, password)
+        user = False
+        for row in result:
+            if row == login:
+                user = True
+                print("Login successful")
+           
+
+
+    
+
+class Create_user:
 
     def __init__(self, main):
 
@@ -76,33 +140,11 @@ class Create_user_frame:
     def backButton(self):
         self.main.destroy()
 
-
-    def load_createdUser_frame(self):
-        self.newWindow = tk.Toplevel(self.main)
-        self.newWindow.geometry('1440x900')
-        self.newWindow.title('Success')
-        self.newWindow.grab_set()
-        self.app = Created_frame(self.newWindow)
-
-    def load_usernameFail_frame(self):
-        self.newWindow = tk.Toplevel(self.main)
-        self.newWindow.geometry('300x200')
-        self.newWindow.title('Create user failed')
-        self.newWindow.grab_set()
-        self.app = usernameFail_frame(self.newWindow)
-
-    def load_passwordFail_frame(self):
-        self.newWindow = tk.Toplevel(self.main)
-        self.newWindow.geometry('300x200')
-        self.newWindow.title('Create user failed')
-        self.newWindow.grab_set()
-        self.app = passwordFail_frame(self.newWindow)
-
     def createNew(self, username, password):
 
-        password = hash(password)
         newUser = User(username, password)
         newUser.get_info()
+        newUser.insert_newUser()
 
     def verify(self):
         username = self.username_entry.get()
@@ -111,9 +153,7 @@ class Create_user_frame:
         self.username_entry.delete(0,END)
         self.password_entry.delete(0,END)
     
-    
-      
-        if re.match('^(?![-._])(?!.*[_.-]{2})[\w.-]{6,30}(?<![-._])$', username):
+        if re.match('^(?![-._])(?!.*[_.-]{2})[\w.-]{4,20}(?<![-._])$', username):
             specialSym =['$', '@', '#', '%']
             val = True
         
@@ -136,67 +176,13 @@ class Create_user_frame:
                 val = False
 
             if val:
-                self.createNew(username, password)
-                self.load_createdUser_frame()
+                # self.createNew(username, password)
+                # self.load_createdUser_frame()
+                messagebox.showinfo('Success', 'User has been created')
             else:
-                self.load_passwordFail_frame()
-                
+                messagebox.showerror('Error!', 'Password should contain at least:\n1) One capital letter \n2) One special sharacter \n3) One number \n4) Length Should be 8-18')       
         else:
-            self.load_usernameFail_frame()
-
-
-class Created_frame:
-        
-    def __init__(self,main):
-        self.main = main
-        self.frame = Frame(self.main)
-        self.frame.pack()
-            
-        self.label1 = Label(self.main, text='Successfully created user!', fg = 'green', font=('Arial', 36))
-        self.label1.pack()
-
-        self.back_button = Button(self.main, text='Ok', width='50', height='2', command = self.backButton)            
-        self.back_button.pack()
-    
-    def backButton(self):
-        self.main.destroy()
-
-
-class usernameFail_frame:
-
-    def __init__(self,main):
-        self.main = main
-        self.frame = Frame(self.main)
-        self.frame.pack()
-
-        self.label1 = Label(self.main, text='Username is too long/short! \nMust be between 4-20', font=('Arial', 36))
-        self.label1.pack()
-
-        self.back_button = Button(self.main, text='Ok', width='50', height='2', command = self.backButton)            
-        self.back_button.pack()
-
-    def backButton(self):
-        self.main.destroy()  
-
-
-class passwordFail_frame:
-
-    def __init__(self,main):
-        self.main = main
-        self.frame = Frame(self.main)
-        self.frame.pack()
-
-        self.label1 = Label(self.main, text ='Invalid Password!', fg='red', font=('Arial', 16))
-        self.label1.pack()
-
-        self.label2 = Label(self.main, text = 'Should contain at least: \n\n1) One cpital letter \n2) One special sharacter \n3) One number \n4) Length Should be 8-18: ')
-        self.label2.pack()
-
-        self.back_button = Button(self.main, text='Ok', width='50', height='2', command = self.backButton)
-        self.back_button.pack()
-
-    def backButton(self):
-        self.main.destroy()
+            messagebox.showerror('Error!', 'Username is too long/short! \nMust be between 4-20')
 
 
 class User:
@@ -208,9 +194,12 @@ class User:
     def get_info(self):
         print(self.username, self.password)
 
-    def addUser(self):
-        #add user to database
-        pass
+    def insert_newUser(self):
+        conn = sqlite3.connect('program_database.db')
+        c = conn.cursor()
+        with conn:
+            c.execute("INSERT INTO users VALUES (:username, :password)", {'username': self.username, 'password': self.password})
+
 
 
 if __name__ == "__main__":
