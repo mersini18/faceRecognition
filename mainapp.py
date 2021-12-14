@@ -5,7 +5,7 @@ import re
 import sqlite3
 
 
-class Main_window:
+class Start_menu:
 
     def __init__(self, main):
 
@@ -97,11 +97,13 @@ class Login_user:
         for row in result:
             if row == login:
                 user = True
-                print("Login successful")
+        
+        if user:
+            messagebox.showinfo("Success", 'Login successful')
+
+        else:
+            messagebox.showerror("Error", 'Username or password incorrect')
            
-
-
-    
 
 class Create_user:
 
@@ -143,7 +145,6 @@ class Create_user:
     def createNew(self, username, password):
 
         newUser = User(username, password)
-        newUser.get_info()
         newUser.insert_newUser()
 
     def verify(self):
@@ -176,8 +177,7 @@ class Create_user:
                 val = False
 
             if val:
-                # self.createNew(username, password)
-                # self.load_createdUser_frame()
+                self.createNew(username, password)
                 messagebox.showinfo('Success', 'User has been created')
             else:
                 messagebox.showerror('Error!', 'Password should contain at least:\n1) One capital letter \n2) One special sharacter \n3) One number \n4) Length Should be 8-18')       
@@ -201,11 +201,18 @@ class User:
             c.execute("INSERT INTO users VALUES (:username, :password)", {'username': self.username, 'password': self.password})
 
 
+class Main_menu:
+
+    def __init__(self, main):
+        self.main = main
+        self.frame = Frame(self.main)
+        self.frame.pack()
+
 
 if __name__ == "__main__":
     root = Tk()
-    root.title('Main menu')
+    root.title('Start menu')
     root.geometry('1440x900')
-    app =  Main_window(root)
+    app =  Start_menu(root)
     root.mainloop()
 
