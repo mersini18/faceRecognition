@@ -79,6 +79,13 @@ class Login_user:
     def backButton(self):
         self.main.destroy()
 
+    def load_mainWindow(self):
+        self.newWindow = tk.Toplevel(self.main)
+        self.newWindow.geometry('1440x900')
+        self.newWindow.title('Main window')
+        self.newWindow.grab_set()
+        self.app = Main_menu(self.newWindow)
+
     def loginUser(self):
         username = self.username_entry.get()
         password = self.password_entry.get()
@@ -89,7 +96,7 @@ class Login_user:
         conn = sqlite3.connect('program_database.db')
         c = conn.cursor()
         with conn:
-            c.execute("SELECT * FROM users")
+            c.execute("SELECT username, password FROM users")
             result = c.fetchall()
 
         login = (username, password)
@@ -100,10 +107,12 @@ class Login_user:
         
         if user:
             messagebox.showinfo("Success", 'Login successful')
+            self.load_mainWindow()
 
         else:
             messagebox.showerror("Error", 'Username or password incorrect')
            
+   
 
 class Create_user:
 
@@ -198,7 +207,7 @@ class User:
         conn = sqlite3.connect('program_database.db')
         c = conn.cursor()
         with conn:
-            c.execute("INSERT INTO users VALUES (:username, :password)", {'username': self.username, 'password': self.password})
+            c.execute("INSERT INTO users(username, password) VALUES (:username, :password)", {'username': self.username, 'password': self.password})
 
 
 class Main_menu:
@@ -207,6 +216,56 @@ class Main_menu:
         self.main = main
         self.frame = Frame(self.main)
         self.frame.pack()
+
+        self.titlelabel = Label(self.main, text='Please select an option below:', font = ('Arial', 20), width = '360', height = '1', bg = 'lightblue')
+        self.titlelabel.pack()
+
+        self.infolabel = Label(self.main, text = '(Start with Create class)', font = ('Arial', 8), width = '360', height = '1', bg = 'lightblue')
+        self.infolabel.pack()
+
+        self.spacelabel = Label(self.main, text='', height ='5')
+        self.spacelabel.pack()
+
+        self.createClass_button = Button(self.main, text = 'Create a class', width='10',height='2', command = None)
+        self.createClass_button.pack()
+
+        self.spacelabel = Label(self.main, text='', height ='2')
+        self.spacelabel.pack()
+
+        self.addStudent_button = Button(self.main, text = 'Add student', width = '10', height = '2', command = None)
+        self.addStudent_button.pack()
+
+        self.spacelabel = Label(self.main, text='', height ='2')
+        self.spacelabel.pack()
+
+        self.viewClass_button = Button(self.main, text = 'View class', width = '10', height = '2', command = None)
+        self.viewClass_button.pack()
+
+        self.spacelabel = Label(self.main, text='', height ='2')
+        self.spacelabel.pack()
+
+        self.backButton = Button(self.main, text='Back', command = self.backButton)
+        self.backButton.pack()
+
+    def backButton(self):
+        self.main.destroy()
+
+    def load_createClass(self):
+        pass
+
+    def load_addStudent(self):
+        pass
+
+    def load_viewClass(self):
+        pass
+
+
+# class Subjectclass:
+
+#     def __init__(self, main):
+#         self.main = main
+#         self.frame = Frame(self.main)
+#         self.frame.pack()
 
 
 if __name__ == "__main__":

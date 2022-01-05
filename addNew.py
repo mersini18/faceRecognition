@@ -5,49 +5,34 @@ conn = sqlite3.connect('program_database.db')
 
 c = conn.cursor()
 
-# c.execute("""CREATE TABLE users (
-#             username text,
-#             password text
+# c.execute("""CREATE TABLE IF NOT EXISTS users (
+#             userID INTEGER PRIMARY KEY,   
+#             username TEXT,
+#             password TEXT
 #             )""")
 
-def insert_newUser(newUser):
+def insert_newUser(username, password):
     with conn:
-        c.execute("INSERT INTO users VALUES (:username, :password)", {'username': newUser.username, 'password': newUser.password})
+        c.execute("INSERT INTO users(username,password) VALUES (:username, :password)", {'username': username, 'password': password})
 
-def read_usernames(username, password):
+def deleteUser():
     with conn:
-        c.execute("SELECT * FROM users")
+        c.execute("DELETE FROM users WHERE userID=4")
+
+username = input("Username: ")
+password = input("Password: ")
+
+insert_newUser(username, password)
+
+def selectUsers():
+    with conn:
+        c.execute("SELECT username, password FROM users")
         result = c.fetchall()
-        # print (result)
-    login = (username, password)
-    print (login)
-    for row in result:
-        if row == login:
-            print("Successful login")
-        else:
-            print("User not found")
-
-   
+        print(result)
 
 
 
-class User:
 
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
-        
-    def get_info(self):
-        print(self.username, self.password)
-
-username = input('Enter username: ')
-password = input('Enter password: ')
-
-
-# newUser = User(username, password)
-# insert_newUser(newUser)
-
-read_usernames(username, password)
 
 
 
