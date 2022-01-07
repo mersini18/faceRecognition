@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import messagebox
+from tkinter import ttk
 import re
 import sqlite3
 
@@ -111,8 +112,7 @@ class Login_user:
 
         else:
             messagebox.showerror("Error", 'Username or password incorrect')
-           
-   
+              
 
 class Create_user:
 
@@ -226,19 +226,19 @@ class Main_menu:
         self.spacelabel = Label(self.main, text='', height ='5')
         self.spacelabel.pack()
 
-        self.createClass_button = Button(self.main, text = 'Create a class', width='10',height='2', command = None)
+        self.createClass_button = Button(self.main, text = 'Create a class', width='10',height='2', command = self.load_createClass)
         self.createClass_button.pack()
 
         self.spacelabel = Label(self.main, text='', height ='2')
         self.spacelabel.pack()
 
-        self.addStudent_button = Button(self.main, text = 'Add student', width = '10', height = '2', command = None)
+        self.addStudent_button = Button(self.main, text = 'Add student', width = '10', height = '2', command = self.load_addStudent)
         self.addStudent_button.pack()
 
         self.spacelabel = Label(self.main, text='', height ='2')
         self.spacelabel.pack()
 
-        self.viewClass_button = Button(self.main, text = 'View class', width = '10', height = '2', command = None)
+        self.viewClass_button = Button(self.main, text = 'View class', width = '10', height = '2', command = self.load_viewClass)
         self.viewClass_button.pack()
 
         self.spacelabel = Label(self.main, text='', height ='2')
@@ -251,21 +251,87 @@ class Main_menu:
         self.main.destroy()
 
     def load_createClass(self):
-        pass
+        self.newWindow = tk.Toplevel(self.main)
+        self.newWindow.geometry('1440x900')
+        self.newWindow.title('Create a class')
+        self.newWindow.grab_set()
+        self.app = Subjectclass(self.newWindow)
 
     def load_addStudent(self):
-        pass
+        self.newWindow = tk.Toplevel(self.main)
+        self.newWindow.geometry('1440x900')
+        self.newWindow.title('Add student')
+        self.newWindow.grab_set()
+        self.app = Student(self.newWindow)
 
     def load_viewClass(self):
-        pass
+        self.newWindow = tk.Toplevel(self.main)
+        self.newWindow.geometry('1440x900')
+        self.newWindow.title('Add student')
+        self.newWindow.grab_set()
+        self.app = Viewsubjectclass(self.newWindow)
 
 
-# class Subjectclass:
+# Main focus right now
 
-#     def __init__(self, main):
-#         self.main = main
-#         self.frame = Frame(self.main)
-#         self.frame.pack()
+class Subjectclass:
+
+    def __init__(self, main):
+        self.main = main
+        self.frame = Frame(self.main)
+        self.frame.pack()
+
+        self.mainlabel = Label(self.main, text='Create class', font=('Arial', 16), width='720', height='3', bg = 'lightblue')
+        self.mainlabel.pack()
+
+        self.infolabel = Label(self.main, text = 'Fill out details below to create class' , font =('Arial', 10), width='720', height='1', bg ='lightblue')
+        self.infolabel.pack()
+
+        self.blanklabel = Label(self.main, text ='')
+        self.blanklabel.pack()
+
+        self.subjectNamelabel = Label(self.main, text = 'Subject name *', fg = 'red')
+        self.subjectNamelabel.pack()
+
+        self.subjectList = ['Select subject ...',
+                            'Biology',
+                            'Business Studies',
+                            'Chemistry',
+                            'Computer Science',
+                            'Maths',
+                            'Physics',
+                            'Psychology']
+
+        self.subjectName = ttk.Combobox(self.main, value=self.subjectList)
+        self.subjectName.current(0)
+        self.subjectName.bind("<<CombobocSelected>>", self.notNULL)
+        self.subjectName.pack()
+
+
+        self.confirmButton = Button(self.main, text='Confirm', command = self.notNULL)
+        self.confirmButton.pack()
+
+    def notNULL(self):
+        if self.subjectName.get() == 'Select subject ...':
+            messagebox.showerror('Error', 'Please select a subject from the dropdown menu')
+        
+
+class Student:
+
+    def __init__(self, main):
+        self.main = main
+        self.frame = Frame(self.main)
+        self.frame.pack()
+
+
+class Viewsubjectclass:
+
+    def __init__(self, main):
+        self.main = main
+        self.frame = Frame(self.main)
+        self.frame.pack()
+
+
 
 
 if __name__ == "__main__":
