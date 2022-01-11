@@ -7,20 +7,15 @@ conn = sqlite3.connect('program_database.db')
 # Initialse cursor to perform acions with database
 c = conn.cursor()
 
-# c.execute("""CREATE TABLE IF NOT EXISTS users (
-#             userID INTEGER PRIMARY KEY,   
-#             username TEXT,
-#             password TEXT
-#             )""")
+c.execute("""CREATE TABLE IF NOT EXISTS users (
+            userID INTEGER PRIMARY KEY,   
+            username TEXT,
+            password TEXT
+            )""")
 
 def insert_newUser(username, password):
     with conn:
         c.execute("INSERT INTO users(username,password) VALUES (:username, :password)", {'username': username, 'password': password})
-# Creates the users table with two columns, username & password
-# c.execute("""CREATE TABLE users (
-#             username text, 
-#             password text
-#              )""")
 
 # A function to insert the new users data in to the table 'users'
 def insert_newUser(newUser):
