@@ -30,7 +30,7 @@ class Start_menu:
     def load_createUser_frame(self):
 
         self.newWindow =  tk.Toplevel(self.main)
-        self.newWindow.geometry('1440x900')
+        self.newWindow.attributes('-fullscreen', True)
         self.newWindow.title('Register Account')
         self.newWindow.grab_set()
         self.app = Create_user(self.newWindow)
@@ -38,7 +38,7 @@ class Start_menu:
     
     def load_loginUser_frame(self):
         self.newWindow = tk.Toplevel(self.main)
-        self.newWindow.geometry('1440x900')
+        self.newWindow.attributes('-fullscreen', True)
         self.newWindow.title('Login')
         self.newWindow.grab_set()
         self.app = Login_user(self.newWindow)
@@ -82,7 +82,7 @@ class Login_user:
 
     def load_mainWindow(self):
         self.newWindow = tk.Toplevel(self.main)
-        self.newWindow.geometry('1440x900')
+        self.newWindow.attributes('-fullscreen', True)
         self.newWindow.title('Main window')
         self.newWindow.grab_set()
         self.app = Main_menu(self.newWindow)
@@ -252,21 +252,21 @@ class Main_menu:
 
     def load_createClass(self):
         self.newWindow = tk.Toplevel(self.main)
-        self.newWindow.geometry('1440x900')
+        self.newWindow.attributes('-fullscreen', True)
         self.newWindow.title('Create a class')
         self.newWindow.grab_set()
         self.app = Subjectclass(self.newWindow)
 
     def load_addStudent(self):
         self.newWindow = tk.Toplevel(self.main)
-        self.newWindow.geometry('1440x900')
+        self.newWindow.attributes('-fullscreen', True)
         self.newWindow.title('Add student')
         self.newWindow.grab_set()
         self.app = Student(self.newWindow)
 
     def load_viewClass(self):
         self.newWindow = tk.Toplevel(self.main)
-        self.newWindow.geometry('1440x900')
+        self.newWindow.attributes('-fullscreen', True)
         self.newWindow.title('Add student')
         self.newWindow.grab_set()
         self.app = Viewsubjectclass(self.newWindow)
@@ -337,7 +337,7 @@ class Viewsubjectclass:
 if __name__ == "__main__":
     root = Tk()
     root.title('Start menu')
-    root.geometry('1440x900')
+    root.attributes('-fullscreen', True)
     app =  Start_menu(root)
     root.mainloop()
 
