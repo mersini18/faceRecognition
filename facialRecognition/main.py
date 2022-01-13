@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import ttk
 from student import Student
 
+
 class Face_Recognition_System:
 
     def __init__(self, main):
@@ -16,7 +17,7 @@ class Face_Recognition_System:
         self.blank = Label(self.main, text = '', height = 2)
         self.blank.grid(row=1)
 
-        self.addStudentbutton = Button(self.main, text = 'Student details', width=20, height=3)
+        self.addStudentbutton = Button(self.main, text = 'Student details',command = self.studentDetails, width=20, height=3)
         self.addStudentbutton.grid(row =2,column =2, columnspan=1)
         self.viewClassbutton = Button(self.main, text = 'View Class', width=20, height=3)
         self.viewClassbutton.grid(row =2,column =3, columnspan=1)
@@ -33,11 +34,12 @@ class Face_Recognition_System:
         self.quitbutton = Button(self.main, text = 'Quit', width=20, height=3)
         self.quitbutton.grid(row =4,column =4, columnspan=1)
 
-    # Student details
+    # Functions buttons
 
+    # Student details button
     def studentDetails(self):
         self.newWindow = Toplevel(self.main)
-        
+        self.app=Student(self.newWindow)
 
 
 if __name__ == '__main__':
