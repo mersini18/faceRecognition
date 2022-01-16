@@ -1,19 +1,29 @@
+#  Import SQLire library
 import sqlite3
 
-
+# Connect to database
 conn = sqlite3.connect('program_database.db')
 
+# Initialse cursor to perform acions with database
 c = conn.cursor()
 
-# c.execute("""CREATE TABLE IF NOT EXISTS users (
-#             userID INTEGER PRIMARY KEY,   
-#             username TEXT,
-#             password TEXT
-#             )""")
+c.execute("""CREATE TABLE IF NOT EXISTS users (
+            userID INTEGER PRIMARY KEY,   
+            username TEXT,
+            password TEXT
+            )""")
 
 def insert_newUser(username, password):
     with conn:
         c.execute("INSERT INTO users(username,password) VALUES (:username, :password)", {'username': username, 'password': password})
+
+# A function to insert the new users data in to the table 'users'
+def insert_newUser(newUser):
+    # With conn automatically commits and closes the connection with the database
+    # once it has executed the following code
+    with conn:
+        # Inserts username and password in to its relevant columns within table
+        c.execute("INSERT INTO users VALUES (:username, :password)", {'username': newUser.username, 'password': newUser.password})
 
 def deleteUser():
     with conn:
@@ -33,6 +43,8 @@ def selectUsers():
 
 
 
+# newUser = User(username, password)
+# insert_newUser(newUser)
 
 
 
