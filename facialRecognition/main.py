@@ -17,11 +17,7 @@ class Face_Recognition_System:
         self.blank = Label(self.main, text = '', height = 2)
         self.blank.grid(row=1)
 
-<<<<<<< HEAD
         self.addStudentbutton = Button(self.main, text = 'Student details', command = self.studentDetails, width=20, height=3)
-=======
-        self.addStudentbutton = Button(self.main, text = 'Student details',command = self.studentDetails, width=20, height=3)
->>>>>>> 117cba20f390d56d2f135cb6ce9b9ea41b60ce3a
         self.addStudentbutton.grid(row =2,column =2, columnspan=1)
         self.viewClassbutton = Button(self.main, text = 'View Class', width=20, height=3)
         self.viewClassbutton.grid(row =2,column =3, columnspan=1)
@@ -43,11 +39,7 @@ class Face_Recognition_System:
     # Student details button
     def studentDetails(self):
         self.newWindow = Toplevel(self.main)
-<<<<<<< HEAD
         self.app = Student(self.newWindow)
-=======
-        self.app=Student(self.newWindow)
->>>>>>> 117cba20f390d56d2f135cb6ce9b9ea41b60ce3a
 
 
 if __name__ == '__main__':

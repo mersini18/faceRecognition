@@ -2,10 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
 import sqlite3
-<<<<<<< HEAD
 
-=======
->>>>>>> 117cba20f390d56d2f135cb6ce9b9ea41b60ce3a
 
 class Student:
 
@@ -13,18 +10,6 @@ class Student:
         self.main = main
         self.main.geometry('1440x900')
         self.main.title('Face Secognition System')
-
-        # Variables
-        self.studentSubject = StringVar()
-        self.studentYear = StringVar()
-        self.studentTutor = StringVar()
-        self.studentfirstName = StringVar()
-        self.studentlastName = StringVar()
-        self.studentEmail = StringVar()
-        self.studentDOB = StringVar()
-        self.radio1 = StringVar()
-        self.radio2 = StringVar()
-
 
         self.titlelabel = Label(self.main, text = 'Student Management System', width=100, height =3, font = ('Arial', 20), bg = 'lightblue')
         self.titlelabel.grid(row=0,column=0,columnspan=7)
@@ -53,17 +38,10 @@ class Student:
                             'Physics',
                             'Psychology']
 
-<<<<<<< HEAD
         self.subjectCombo = ttk.Combobox(self.subjectFrame, value=self.subjectList, state = 'readonly')
         self.subjectCombo.current(0)
         self.subjectCombo.bind("<<CombobocSelected>>")
         self.subjectCombo.grid(row=0,column=1, padx=2,pady=10)
-=======
-        self.subjectcombo = ttk.Combobox(self.subjectFrame, textvariable = self.studentSubject, value=self.subjectList, state = 'readonly')
-        self.subjectcombo.current(0)
-        self.subjectcombo.bind("<<CombobocSelected>>")
-        self.subjectcombo.grid(row=0,column=1, padx=2,pady=10)
->>>>>>> 117cba20f390d56d2f135cb6ce9b9ea41b60ce3a
 
         #  Year
         self.yearLabel = Label(self.subjectFrame, text = 'Year: ', bg='white')
@@ -78,17 +56,10 @@ class Student:
                             '12',
                             '13']
 
-<<<<<<< HEAD
         self.yearCombo = ttk.Combobox(self.subjectFrame, value=self.yearList, state = 'readonly')
         self.yearCombo.current(0)
         self.yearCombo.bind("<<CombobocSelected>>")
         self.yearCombo.grid(row=1,column=1, padx=2,pady=10)
-=======
-        self.yearcombo = ttk.Combobox(self.subjectFrame, textvariable=self.studentYear, value=self.yearList, state = 'readonly')
-        self.yearcombo.current(0)
-        self.yearcombo.bind("<<CombobocSelected>>")
-        self.yearcombo.grid(row=1,column=1, padx=2,pady=10)
->>>>>>> 117cba20f390d56d2f135cb6ce9b9ea41b60ce3a
 
         # Tutor
 
@@ -103,17 +74,10 @@ class Student:
                             'E',
                             'F',]
 
-<<<<<<< HEAD
         self.tutorCombo = ttk.Combobox(self.subjectFrame, value=self.tutorList, state = 'readonly')
         self.tutorCombo.current(0)
         self.tutorCombo.bind("<<CombobocSelected>>")
         self.tutorCombo.grid(row=0,column=4, padx=2,pady=10)
-=======
-        self.tutorcombo = ttk.Combobox(self.subjectFrame, textvariable=self.studentTutor, value=self.tutorList, state = 'readonly')
-        self.tutorcombo.current(0)
-        self.tutorcombo.bind("<<CombobocSelected>>")
-        self.tutorcombo.grid(row=0,column=4, padx=2,pady=10)
->>>>>>> 117cba20f390d56d2f135cb6ce9b9ea41b60ce3a
 
     # Student information frame
 
@@ -125,6 +89,7 @@ class Student:
         self.studentfirstName_label = Label(self.studentFrame, text = 'First name: ', bg='white')
         self.studentfirstName_label.grid(row=0,column=0,padx=2,pady=10,sticky=W)
 
+        self.studentfirstName = StringVar()
         self.studentfirstName_entry = ttk.Entry(self.studentFrame, textvariable=self.studentfirstName, width=20)
         self.studentfirstName_entry.grid(row=0,column=1,padx=2,pady=10,sticky=W)
 
@@ -133,6 +98,7 @@ class Student:
         self.studentlastName_label = Label(self.studentFrame, text = 'Last name: ', bg='white')
         self.studentlastName_label.grid(row=1,column=0,padx=2,pady=10,sticky=W)
 
+        self.studentlastName = StringVar()
         self.studentlastName_entry = ttk.Entry(self.studentFrame, textvariable=self.studentlastName, width=20)
         self.studentlastName_entry.grid(row=1,column=1,padx=2,pady=10,sticky=W)
 
@@ -141,6 +107,7 @@ class Student:
         self.studentEmail_label = Label(self.studentFrame, text = 'Email address: ', bg='white')
         self.studentEmail_label.grid(row=2,column=0,padx=2,pady=10,sticky=W)
 
+        self.studentEmail = StringVar()
         self.studentEmail_entry = ttk.Entry(self.studentFrame, textvariable=self.studentEmail, width=30)
         self.studentEmail_entry.grid(row=2,column=1,padx=2,pady=10,sticky=W)
 
@@ -149,25 +116,18 @@ class Student:
         self.studentDOB_label = Label(self.studentFrame, text = 'Date of birth: ', bg='white')
         self.studentDOB_label.grid(row=3,column=0,padx=2,pady=10,sticky=W)
 
+        self.studentDOB = StringVar()
         self.studentDOB_entry = ttk.Entry(self.studentFrame, textvariable=self.studentDOB, width=20)
         self.studentDOB_entry.grid(row=3,column=1,padx=2,pady=10,sticky=W)
 
         # Radio buttons
 
-<<<<<<< HEAD
         self.studentPhoto = StringVar()
 
         self.radiobutton1 = ttk.Radiobutton(self.studentFrame, variable=self.studentPhoto, text= 'Take photo sample', value = 'Yes')
         self.radiobutton1.grid(row=4,column=0, padx=2,pady=10, sticky=W)
 
         self.radiobutton2 = ttk.Radiobutton(self.studentFrame, variable=self.studentPhoto, text= 'No photo sample', value='No')
-=======
-        # Text variable removes text from button
-        self.radiobutton1 = ttk.Radiobutton(self.studentFrame, text= 'Take photo sample', value = 'Yes')
-        self.radiobutton1.grid(row=4,column=0, padx=2,pady=10, sticky=W)
-
-        self.radiobutton2 = ttk.Radiobutton(self.studentFrame, text= 'No photo sample', value='No')
->>>>>>> 117cba20f390d56d2f135cb6ce9b9ea41b60ce3a
         self.radiobutton2.grid(row=4,column=1,padx=2,pady=10,sticky=W)
     
     # Buttons frame
@@ -176,11 +136,7 @@ class Student:
         self.buttonFrame.place(x=0,y=200,width=645,height=80)
 
         # Submit Button
-<<<<<<< HEAD
         self.submitButton = Button(self.buttonFrame, command = self.addData, text='Submit', width=10, bg='grey')
-=======
-        self.submitButton = Button(self.buttonFrame, command=self.addData, text='Submit', width=15, bg='grey')
->>>>>>> 117cba20f390d56d2f135cb6ce9b9ea41b60ce3a
         self.submitButton.grid(row=0,column=0)
 
         # Update button
@@ -202,10 +158,6 @@ class Student:
         # Update photo sample
         self.updatePhotobutton = Button(self.buttonFrame, text='Update photo', width=15, bg='grey')
         self.updatePhotobutton.grid(row=1,column=1)
-
-        # Update Photo
-        self.updatephotoButton = Button(self.buttonFrame, text='Update photo', width=15, bg='grey')
-        self.updatephotoButton.grid(row=0,column=4)
 
 
     # Right label frame
@@ -306,7 +258,6 @@ class Student:
     # Function declaration
 
     def addData(self):
-<<<<<<< HEAD
 
         # Ensure all fields have been entered
         self.inputError = False
@@ -442,19 +393,11 @@ class Student:
                 self.fetchData()
             except Exception as es:
                 messagebox.showerror("Error",f"Due to: {str(es)}")
-=======
-        if self.studentSubject.get() == 'Select subject':
-            messagebox.showerror('Error', 'All fields are required', parent=self.main)
-        elif self.studentYear.get() == 'Select year':
-            messagebox.showerror('Error', 'All fields are required', parent=self.main)
-        elif self.studentTutor.get() == 'Select tutor group':
-            messagebox.showerror('Error', 'All fields are required', parent=self.main)
-        else:
-            messagebox.showinfo('Success', 'Student added', parent=self.main)
->>>>>>> 117cba20f390d56d2f135cb6ce9b9ea41b60ce3a
 
 
 if __name__ == '__main__':
     main = Tk()
     app = Student(main)
     main.mainloop() 
+
+# 49:5e episode 3
