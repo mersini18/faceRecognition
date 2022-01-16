@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
+import sqlite3
+
 
 class Student:
 
@@ -36,10 +38,10 @@ class Student:
                             'Physics',
                             'Psychology']
 
-        self.subjectcombo = ttk.Combobox(self.subjectFrame, value=self.subjectList, state = 'readonly')
-        self.subjectcombo.current(0)
-        self.subjectcombo.bind("<<CombobocSelected>>")
-        self.subjectcombo.grid(row=0,column=1, padx=2,pady=10)
+        self.subjectCombo = ttk.Combobox(self.subjectFrame, value=self.subjectList, state = 'readonly')
+        self.subjectCombo.current(0)
+        self.subjectCombo.bind("<<CombobocSelected>>")
+        self.subjectCombo.grid(row=0,column=1, padx=2,pady=10)
 
         #  Year
         self.yearLabel = Label(self.subjectFrame, text = 'Year: ', bg='white')
@@ -54,10 +56,10 @@ class Student:
                             '12',
                             '13']
 
-        self.yearcombo = ttk.Combobox(self.subjectFrame, value=self.yearList, state = 'readonly')
-        self.yearcombo.current(0)
-        self.yearcombo.bind("<<CombobocSelected>>")
-        self.yearcombo.grid(row=1,column=1, padx=2,pady=10)
+        self.yearCombo = ttk.Combobox(self.subjectFrame, value=self.yearList, state = 'readonly')
+        self.yearCombo.current(0)
+        self.yearCombo.bind("<<CombobocSelected>>")
+        self.yearCombo.grid(row=1,column=1, padx=2,pady=10)
 
         # Tutor
 
@@ -72,15 +74,15 @@ class Student:
                             'E',
                             'F',]
 
-        self.tutorcombo = ttk.Combobox(self.subjectFrame, value=self.tutorList, state = 'readonly')
-        self.tutorcombo.current(0)
-        self.tutorcombo.bind("<<CombobocSelected>>")
-        self.tutorcombo.grid(row=0,column=4, padx=2,pady=10)
+        self.tutorCombo = ttk.Combobox(self.subjectFrame, value=self.tutorList, state = 'readonly')
+        self.tutorCombo.current(0)
+        self.tutorCombo.bind("<<CombobocSelected>>")
+        self.tutorCombo.grid(row=0,column=4, padx=2,pady=10)
 
     # Student information frame
 
         self.studentFrame = LabelFrame(self.leftFrame, bd=2 , bg='white', relief=RIDGE, text='Enter student information below:')
-        self.studentFrame.place(x=10,y=210,width=620,height=300)
+        self.studentFrame.place(x=10,y=210,width=650,height=300)
 
         # First name label
 
@@ -120,32 +122,42 @@ class Student:
 
         # Radio buttons
 
-        self.radiobutton1 = ttk.Radiobutton(self.studentFrame, text= 'Take photo sample', value = 'Yes')
+        self.studentPhoto = StringVar()
+
+        self.radiobutton1 = ttk.Radiobutton(self.studentFrame, variable=self.studentPhoto, text= 'Take photo sample', value = 'Yes')
         self.radiobutton1.grid(row=4,column=0, padx=2,pady=10, sticky=W)
 
-        self.radiobutton2 = ttk.Radiobutton(self.studentFrame, text= 'No photo sample', value='YES')
+        self.radiobutton2 = ttk.Radiobutton(self.studentFrame, variable=self.studentPhoto, text= 'No photo sample', value='No')
         self.radiobutton2.grid(row=4,column=1,padx=2,pady=10,sticky=W)
     
     # Buttons frame
 
         self.buttonFrame = Frame(self.studentFrame, bd=2, relief=RIDGE, bg='white')
-        self.buttonFrame.place(x=0,y=200,width=615,height=80)
+        self.buttonFrame.place(x=0,y=200,width=645,height=80)
 
         # Submit Button
-        self.submitButton = Button(self.buttonFrame, text='Submit', width=15, bg='grey')
+        self.submitButton = Button(self.buttonFrame, command = self.addData, text='Submit', width=10, bg='grey')
         self.submitButton.grid(row=0,column=0)
 
         # Update button
-        self.updateButton = Button(self.buttonFrame, text='Update', width=15, bg='grey')
+        self.updateButton = Button(self.buttonFrame, text='Update', command=self.updateStudent, width=10, bg='grey')
         self.updateButton.grid(row=0,column=1)
 
+        # Delete button
+        self.deleteButton = Button(self.buttonFrame, text = 'Delete', width=10, bg='grey')
+        self.deleteButton.grid(row=0,column=2)
+
         # Reset button
-        self.resetButton = Button(self.buttonFrame, text='Reset', width=15, bg='grey')
-        self.resetButton.grid(row=0,column=2)
+        self.resetButton = Button(self.buttonFrame, text='Reset', width=10, bg='grey')
+        self.resetButton.grid(row=0,column=3)
 
         # Take Photo
         self.takephotoButton = Button(self.buttonFrame, text='Take photo sample', width=15, bg='grey')
-        self.takephotoButton.grid(row=0,column=3)
+        self.takephotoButton.grid(row=1,column=0)
+
+        # Update photo sample
+        self.updatePhotobutton = Button(self.buttonFrame, text='Update photo', width=15, bg='grey')
+        self.updatePhotobutton.grid(row=1,column=1)
 
 
     # Right label frame
@@ -200,11 +212,11 @@ class Student:
         self.studentData= ["StudentID",
                             "First name",
                             "Last name",
+                            "Email",
                             "Year",
                             "Tutor",
-                            "Email",
-                            "DOB",
                             "Subject",
+                            "DOB",
                             "Photo"]
 
         # Initialise table through Treeview
@@ -232,25 +244,158 @@ class Student:
         self.studentTable.column(self.studentData[0],width=100)
         self.studentTable.column(self.studentData[1],width=100)
         self.studentTable.column(self.studentData[2],width=100)
-        self.studentTable.column(self.studentData[3],width=100)
+        self.studentTable.column(self.studentData[3],width=200)
         self.studentTable.column(self.studentData[4],width=100)
         self.studentTable.column(self.studentData[5],width=100)
-        self.studentTable.column(self.studentData[6],width=100)
+        self.studentTable.column(self.studentData[6],width=150)
         self.studentTable.column(self.studentData[7],width=100)
         self.studentTable.column(self.studentData[8],width=100)
         self.studentTable.pack(fill=BOTH,expand=1)
-
+        self.studentTable.bind("<ButtonRelease>",self.getCursor)
+        self.fetchData()
+ 
 
     # Function declaration
 
     def addData(self):
-        pass
 
+        # Ensure all fields have been entered
+        self.inputError = False
+        if self.subjectCombo.get() == 'Select subject':
+            self.inputError = True
+        elif self.yearCombo.get() == 'Select year':
+            self.inputError = True
+        elif self.tutorCombo.get() == 'Select tutor group':
+            self.inputError = True
+        elif self.studentfirstName.get() == '':
+            self.inputError = True
+        elif self.studentlastName.get() == '':
+            self.inputError = True
+        elif self.studentEmail.get() == '':
+            self.inputError = True
+        elif self.studentDOB.get() == '':
+            self.inputError = True
 
-        
+        if self.inputError == True:
+            messagebox.showerror("Error", "All fields must be answered")
+        else:
+            try:
+                # Create connection to database
+                conn =  sqlite3.connect('programdatabase.db')
+                c = conn.cursor()
+                with conn:
+                    # Insert student entry to database
+                    c.execute("""INSERT INTO student(firstName,lastName,email,year,tutor,subject,DOB,photo) 
+                                                    VALUES (:firstName, 
+                                                            :lastName, 
+                                                            :email,
+                                                            :year,
+                                                            :tutor,
+                                                            :subject,
+                                                            :DOB,
+                                                            :photo)""", 
+                                                            {'firstName': self.studentfirstName.get(),
+                                                            'lastName': self.studentlastName.get(),
+                                                            'email': self.studentEmail.get(),
+                                                            'year': self.yearCombo.get(),
+                                                            'tutor': self.tutorCombo.get(),
+                                                            'subject': self.subjectCombo.get(),
+                                                            'DOB': self.studentDOB.get(),
+                                                            'photo': self.studentPhoto.get()})
+                self.fetchData()
+                messagebox.showinfo("Success", "Student saved ")
+            except Exception as es:
+                messagebox.showerror("Error",f"Due to : {str(es)}")
+                
+    # Search table
+
+    def fetchData(self):
+        conn = sqlite3.connect("programdatabase.db")
+        c = conn.cursor()
+        with conn:
+            c.execute("SELECT * FROM student")
+        fetchResult = c.fetchall()
+
+        if len(fetchResult) != 0:
+            self.studentTable.delete(*self.studentTable.get_children())
+            for i in fetchResult:
+                self.studentTable.insert("", END, values=i)
+
+    # Import from database
+
+    def getCursor(self,event=""):
+        cursorFocus = self.studentTable.focus()
+        content = self.studentTable.item(cursorFocus)
+        fetchResult=content["values"]
+
+        self.studentfirstName.set(fetchResult[1])
+        self.studentlastName.set(fetchResult[2])
+        self.studentEmail.set(fetchResult[3])
+        self.yearCombo.set(fetchResult[4])
+        self.tutorCombo.set(fetchResult[5])
+        self.subjectCombo.set(fetchResult[6])
+        self.studentDOB.set(fetchResult[7])
+        self.studentPhoto.set(fetchResult[8])
+
+    #  Update button function
+
+    def updateStudent(self):
+
+         # Ensure all fields have been entered
+        self.inputError = False
+        if self.subjectCombo.get() == 'Select subject':
+            self.inputError = True
+        elif self.yearCombo.get() == 'Select year':
+            self.inputError = True
+        elif self.tutorCombo.get() == 'Select tutor group':
+            self.inputError = True
+        elif self.studentfirstName.get() == '':
+            self.inputError = True
+        elif self.studentlastName.get() == '':
+            self.inputError = True
+        elif self.studentEmail.get() == '':
+            self.inputError = True
+        elif self.studentDOB.get() == '':
+            self.inputError = True
+
+        if self.inputError == True:
+            messagebox.showerror("Error", "All fields must be answered")
+        else:
+            try:
+                # Ask user for input
+                update = messagebox.askyesno("Update","Do you want to update these details")
+                if update>0:
+                    conn = sqlite3.connect("programdatabase.db")
+                    c = conn.cursor()
+                    with conn:
+                        # create userID column
+                        # update student details with new values
+                        c.execute("""UPDATE student SET firstName = :first,
+                                                          lastName = :last,
+                                                          email = :email,
+                                                          year = :year,
+                                                          tutor = :tutor,
+                                                          subject = :subject,
+                                                          DOB = :DOB,
+                                                          photo = :photo""",
+                                                          {'firstName': self.studentfirstName.get(),
+                                                            'lastName': self.studentlastName.get(),
+                                                            'email': self.studentEmail.get(),
+                                                            'year': self.yearCombo.get(),
+                                                            'tutor': self.tutorCombo.get(),
+                                                            'subject': self.subjectCombo.get(),
+                                                            'DOB': self.studentDOB.get(),
+                                                            'photo': self.studentPhoto.get()})
+                else:
+                    if not update:
+                        return
+                messagebox.showinfo("Success", "Student update successful")
+                self.fetchData()
+            except Exception as es:
+                messagebox.showerror("Error",f"Due to: {str(es)}")
 
 
 if __name__ == '__main__':
     main = Tk()
     app = Student(main)
-    main.mainloop()
+    main.mainloop() 
