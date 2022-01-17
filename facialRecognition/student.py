@@ -132,6 +132,8 @@ class Student:
 
         # Radio buttons
 
+        # set as text variable and they dont work!!!!
+        
         self.studentPhoto = StringVar()
 
         self.radiobutton1 = ttk.Radiobutton(self.studentFrame, variable=self.studentPhoto, text= 'Take photo sample', value = 'Yes')
