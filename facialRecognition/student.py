@@ -22,12 +22,21 @@ class Student:
     # Student course frame
 
         self.subjectFrame = LabelFrame(self.leftFrame, bd=2 , bg='white', relief=RIDGE, text='Student subject information')
-        self.subjectFrame.place(x=10,y=10,width=620,height=200)
+        self.subjectFrame.place(x=10,y=10,width=620,height=150)
 
         # Subjet information
 
+        # Student ID
+
+        self.studentIDlabel = Label(self.subjectFrame, text = 'StudentID: ', bg='white')
+        self.studentIDlabel.grid(row=0,column=0,sticky=W)
+
+        self.studentID = StringVar()
+        self.studentID_entry = ttk.Entry(self.subjectFrame, textvariable=self.studentID, width=20, state='readonly')
+        self.studentID_entry.grid(row=0,column=1,padx=2,pady=10)
+
         self.subjectLabel = Label(self.subjectFrame, text = 'Subject: ', bg='white')
-        self.subjectLabel.grid(row=0,column=0,sticky=W)
+        self.subjectLabel.grid(row=0,column=2,sticky=W)
 
         self.subjectList = ['Select subject',
                             'Biology',
@@ -41,7 +50,7 @@ class Student:
         self.subjectCombo = ttk.Combobox(self.subjectFrame, value=self.subjectList, state = 'readonly')
         self.subjectCombo.current(0)
         self.subjectCombo.bind("<<CombobocSelected>>")
-        self.subjectCombo.grid(row=0,column=1, padx=2,pady=10)
+        self.subjectCombo.grid(row=0,column=3, padx=2,pady=10)
 
         #  Year
         self.yearLabel = Label(self.subjectFrame, text = 'Year: ', bg='white')
@@ -64,7 +73,7 @@ class Student:
         # Tutor
 
         self.tutorLabel = Label(self.subjectFrame, text = 'Tutor group: ', bg='white')
-        self.tutorLabel.grid(row=0,column=3,sticky=W)
+        self.tutorLabel.grid(row=1,column=2,sticky=W)
 
         self.tutorList = ['Select tutor group',
                             'A',
@@ -77,12 +86,13 @@ class Student:
         self.tutorCombo = ttk.Combobox(self.subjectFrame, value=self.tutorList, state = 'readonly')
         self.tutorCombo.current(0)
         self.tutorCombo.bind("<<CombobocSelected>>")
-        self.tutorCombo.grid(row=0,column=4, padx=2,pady=10)
+        self.tutorCombo.grid(row=1,column=3, padx=2,pady=10)
 
+        
     # Student information frame
 
         self.studentFrame = LabelFrame(self.leftFrame, bd=2 , bg='white', relief=RIDGE, text='Enter student information below:')
-        self.studentFrame.place(x=10,y=210,width=650,height=300)
+        self.studentFrame.place(x=10,y=160,width=650,height=400)
 
         # First name label
 
@@ -133,7 +143,7 @@ class Student:
     # Buttons frame
 
         self.buttonFrame = Frame(self.studentFrame, bd=2, relief=RIDGE, bg='white')
-        self.buttonFrame.place(x=0,y=200,width=645,height=80)
+        self.buttonFrame.place(x=0,y=300,width=645,height=80)
 
         # Submit Button
         self.submitButton = Button(self.buttonFrame, command = self.addData, text='Submit', width=10, bg='grey')
@@ -144,11 +154,11 @@ class Student:
         self.updateButton.grid(row=0,column=1)
 
         # Delete button
-        self.deleteButton = Button(self.buttonFrame, text = 'Delete', width=10, bg='grey')
+        self.deleteButton = Button(self.buttonFrame, text = 'Delete', command=self.deleteData, width=10, bg='grey')
         self.deleteButton.grid(row=0,column=2)
 
-        # Reset button
-        self.resetButton = Button(self.buttonFrame, text='Reset', width=10, bg='grey')
+        # Clear data button
+        self.resetButton = Button(self.buttonFrame, text='Reset', command=self.clearData, width=10, bg='grey')
         self.resetButton.grid(row=0,column=3)
 
         # Take Photo
@@ -328,6 +338,7 @@ class Student:
         content = self.studentTable.item(cursorFocus)
         fetchResult=content["values"]
 
+        self.studentID.set(fetchResult[0])
         self.studentfirstName.set(fetchResult[1])
         self.studentlastName.set(fetchResult[2])
         self.studentEmail.set(fetchResult[3])
@@ -370,22 +381,24 @@ class Student:
                     with conn:
                         # create userID column
                         # update student details with new values
-                        c.execute("""UPDATE student SET firstName = :first,
-                                                          lastName = :last,
-                                                          email = :email,
-                                                          year = :year,
-                                                          tutor = :tutor,
-                                                          subject = :subject,
-                                                          DOB = :DOB,
-                                                          photo = :photo""",
-                                                          {'firstName': self.studentfirstName.get(),
-                                                            'lastName': self.studentlastName.get(),
-                                                            'email': self.studentEmail.get(),
-                                                            'year': self.yearCombo.get(),
-                                                            'tutor': self.tutorCombo.get(),
-                                                            'subject': self.subjectCombo.get(),
-                                                            'DOB': self.studentDOB.get(),
-                                                            'photo': self.studentPhoto.get()})
+                        c.execute("""UPDATE student SET firstName = :firstName,
+                                                        lastName = :lastName,
+                                                        email = :email,
+                                                        year = :year,
+                                                        tutor = :tutor,
+                                                        subject = :subject,
+                                                        DOB = :DOB,
+                                                        photo = :photo
+                                                        WHERE studentID = :studentID""",
+                                                        {'studentID': self.studentID.get(),
+                                                        'firstName': self.studentfirstName.get(),
+                                                        'lastName': self.studentlastName.get(),
+                                                        'email': self.studentEmail.get(),
+                                                        'year': self.yearCombo.get(),
+                                                        'tutor': self.tutorCombo.get(),
+                                                        'subject': self.subjectCombo.get(),
+                                                        'DOB': self.studentDOB.get(),
+                                                        'photo': self.studentPhoto.get()})
                 else:
                     if not update:
                         return
@@ -394,10 +407,37 @@ class Student:
             except Exception as es:
                 messagebox.showerror("Error",f"Due to: {str(es)}")
 
+    # Delete function
+    def deleteData(self):
+        try:
+            delete = messagebox.askyesno("Delete Student", 'Would you like to remove this student')
+            if delete>0:
+                conn = sqlite3.connect("programdatabase.db")
+                c = conn.cursor()
+                with conn:
+                    c.execute("DELETE FROM student WHERE studentID = :studentID", {'studentID': self.studentID.get()})
+            else:
+                if not delete:
+                    return
+            messagebox.showinfo("Delete", "Student successfully deleted")
+        except Exception as es:
+                messagebox.showerror("Error",f"Due to: {str(es)}")
+
+    # Clear boxes function
+    def clearData(self):
+        self.studentID.set('')
+        self.subjectCombo.set('Select subject')
+        self.yearCombo.set('Select year')
+        self.tutorCombo.set('Select tutor group')
+        self.studentfirstName.set('')
+        self.studentlastName.set('')
+        self.studentEmail.set('')
+        self.studentDOB.set('')
+        self.studentPhoto.set('')
+
+
 
 if __name__ == '__main__':
     main = Tk()
     app = Student(main)
     main.mainloop() 
-
-# 49:5e episode 3
