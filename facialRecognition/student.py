@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
 import sqlite3
+# import cv2
 
 
 class Student:
@@ -164,7 +165,7 @@ class Student:
         self.resetButton.grid(row=0,column=3)
 
         # Take Photo
-        self.takephotoButton = Button(self.buttonFrame, text='Take photo sample', width=15, bg='grey')
+        self.takephotoButton = Button(self.buttonFrame, text='Take photo sample', command=self.generateDataset, width=15, bg='grey')
         self.takephotoButton.grid(row=1,column=0)
 
         # Update photo sample
@@ -478,7 +479,7 @@ class Student:
                                                         DOB = :DOB,
                                                         photo = :photo
                                                         WHERE studentID = :studentID""",
-                                                        {'studentID': self.studentID.get(),
+                                                        {'studentID': self.studentID.get()==id+1,
                                                         'firstName': self.studentfirstName.get(),
                                                         'lastName': self.studentlastName.get(),
                                                         'email': self.studentEmail.get(),
@@ -489,8 +490,44 @@ class Student:
                                                         'photo': self.studentPhoto.get()})
                     self.fetchData()
                     self.clearData()                
-            except:
-                pass
+
+                    # Load predefined face
+
+                    faceClassifier = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+
+                    def faceCropped(img):
+                        gray=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+                        faces =faceClassifier.detectMultiScale(gray,1.3,5)
+                        # scaling factor = 1.3
+                        # minimum neighbor = 5
+
+                        for (x,y,w,h) in faces:
+                            faceCropped=img[y:y+h,x,x+w]
+                            return faceCropped
+                    
+                    cap = cv2.VideoCapture(0)
+                    imgID = 0
+                    while True:
+                        ret,frame=cap.read()
+                        if faceCropped(frame) is not None:
+                            imgID +=1
+                        face = cv2.resize(faceCropped(frame),(450,450))
+                        face = cv2.cvtColor(face,cv2.COLOR_BGR2GRAY)
+                        filenamePath = "data/user."+str(id)+"."+str(imgID)+".jpg"
+                        cv2.imwrite(filenamePath)
+                        cv2.putText(face,str(imgID),(50,50),cv2.FONT_HERSHEY_COMPLEX,2,(0,255,0),2)
+                        cv2.imshow("Cropped Face",face)
+
+                        if cv2.waitKey(1) == 13 or int(imgID)==100:
+                            break
+                    
+                    cap.release()
+                    cv2.destroyAllWindows()
+                    messagebox.showinfo("Result","Generating dataset complete")
+
+
+            except Exception as es:
+                messagebox.showerror("Error",f"Due to: {str(es)}")
 
 
 
