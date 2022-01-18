@@ -437,6 +437,61 @@ class Student:
         self.studentDOB.set('')
         self.studentPhoto.set('')
 
+    # Take photo samples
+
+    def generateDataset(self):
+        
+        self.inputError = False
+        if self.subjectCombo.get() == 'Select subject':
+            self.inputError = True
+        elif self.yearCombo.get() == 'Select year':
+            self.inputError = True
+        elif self.tutorCombo.get() == 'Select tutor group':
+            self.inputError = True
+        elif self.studentfirstName.get() == '':
+            self.inputError = True
+        elif self.studentlastName.get() == '':
+            self.inputError = True
+        elif self.studentEmail.get() == '':
+            self.inputError = True
+        elif self.studentDOB.get() == '':
+            self.inputError = True
+
+        if self.inputError == True:
+            messagebox.showerror("Error", "All fields must be answered")
+        else:
+            try:
+                conn = sqlite3.connect('programdatabase.db')
+                c = conn.cursor()
+                with conn:
+                    c.execute('SELECT * FROM student')
+                    result = c.fetchall()
+                    id = 0
+                    for x in result:
+                        id +=1
+                        c.execute("""UPDATE student SET firstName = :firstName,
+                                                        lastName = :lastName,
+                                                        email = :email,
+                                                        year = :year,
+                                                        tutor = :tutor,
+                                                        subject = :subject,
+                                                        DOB = :DOB,
+                                                        photo = :photo
+                                                        WHERE studentID = :studentID""",
+                                                        {'studentID': self.studentID.get(),
+                                                        'firstName': self.studentfirstName.get(),
+                                                        'lastName': self.studentlastName.get(),
+                                                        'email': self.studentEmail.get(),
+                                                        'year': self.yearCombo.get(),
+                                                        'tutor': self.tutorCombo.get(),
+                                                        'subject': self.subjectCombo.get(),
+                                                        'DOB': self.studentDOB.get(),
+                                                        'photo': self.studentPhoto.get()})
+                    self.fetchData()
+                    self.clearData()                
+            except:
+                pass
+
 
 
 if __name__ == '__main__':
