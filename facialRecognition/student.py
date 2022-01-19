@@ -3,6 +3,7 @@ from tkinter import messagebox
 from tkinter import ttk
 import sqlite3
 import cv2
+import numpy as np
 
 
 class Student:
@@ -484,7 +485,8 @@ class Student:
                                                     'lastName': self.studentlastName.get(),
                                                     'email': self.studentEmail.get(),
                                                     'year': self.yearCombo.get(),
-                                                    'tutor': self.tutorCombo.get(),                                                        'subject': self.subjectCombo.get(),
+                                                    'tutor': self.tutorCombo.get(),                                                        
+                                                    'subject': self.subjectCombo.get(),
                                                     'DOB': self.studentDOB.get(),
                                                     'photo': self.studentPhoto.get()})
                 conn.commit()
@@ -495,10 +497,9 @@ class Student:
                 # Load predefined face
 
                 
-                faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")                    
+                faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")                
                 
                 def faceCropped(frame):
-            
                     gray=cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
                     faces = faceCascade.detectMultiScale(gray, 1.3, 5)
                     # scaling factor = 1.3
@@ -514,18 +515,19 @@ class Student:
                     ret, frame = cap.read()                        
                     if faceCropped(frame) is not None:
                         imgID +=1
-                    face = cv2.resize(faceCropped(frame),(450, 450))
-                    face = cv2.cvtColor(face,cv2.COLOR_BGR2GRAY)
-                    filenamePath = "data/user."+str(id)+"."+str(imgID)+".jpg"
+                    face = cv2.resize(faceCropped(frame), (500,500))
+                    face = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
+                    filenamePath = "project/facialrecognition/data/user."+str(id)+"."+str(imgID)+".jpg"
                     cv2.imwrite(filenamePath, face)
                     cv2.putText(face,str(imgID),(50,50),cv2.FONT_HERSHEY_COMPLEX,2,(0,255,0),2)
-                    cv2.imshow("Cropped Face",face)
+                    cv2.imshow("Cropped Face", face)
 
-                    if cv2.waitKey(1) == 13 or int(imgID)==30:
+                    if cv2.waitKey(1) == 13 or int(imgID)==100:
                         break
                     
                 cap.release()
                 cv2.destroyAllWindows()
+                
                 messagebox.showinfo("Result","Generating dataset complete")
 
 
