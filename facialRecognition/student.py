@@ -471,23 +471,22 @@ class Student:
                 for x in result:
                     id +=1  
                     c.execute("""UPDATE student SET firstName = :firstName,
-                                                        lastName = :lastName,
-                                                        email = :email,
-                                                        year = :year,
-                                                        tutor = :tutor,
-                                                        subject = :subject,
-                                                        DOB = :DOB,
-                                                        photo = :photo
-                                                        WHERE studentID = :studentID""",
-                                                        {'studentID': self.studentID.get()==id+1,
-                                                        'firstName': self.studentfirstName.get(),
-                                                        'lastName': self.studentlastName.get(),
-                                                        'email': self.studentEmail.get(),
-                                                        'year': self.yearCombo.get(),
-                                                        'tutor': self.tutorCombo.get(),
-                                                        'subject': self.subjectCombo.get(),
-                                                        'DOB': self.studentDOB.get(),
-                                                        'photo': self.studentPhoto.get()})
+                                                    lastName = :lastName,
+                                                    email = :email,
+                                                    year = :year,
+                                                    tutor = :tutor,
+                                                    subject = :subject,
+                                                    DOB = :DOB,
+                                                    photo = :photo
+                                                    WHERE studentID = :studentID""",
+                                                    {'studentID': self.studentID.get()==id+1,
+                                                    'firstName': self.studentfirstName.get(),
+                                                    'lastName': self.studentlastName.get(),
+                                                    'email': self.studentEmail.get(),
+                                                    'year': self.yearCombo.get(),
+                                                    'tutor': self.tutorCombo.get(),                                                        'subject': self.subjectCombo.get(),
+                                                    'DOB': self.studentDOB.get(),
+                                                    'photo': self.studentPhoto.get()})
                 conn.commit()
                 self.fetchData()
                 self.clearData()  
@@ -519,7 +518,7 @@ class Student:
                     face = cv2.cvtColor(face,cv2.COLOR_BGR2GRAY)
                     filenamePath = "data/user."+str(id)+"."+str(imgID)+".jpg"
                     cv2.imwrite(filenamePath, face)
-                    cv2.putText(face,str(imgID),(50,50),cv2.FONT_HERSHEY_COMPLEX,2,(0,255,0),2) #this one
+                    cv2.putText(face,str(imgID),(50,50),cv2.FONT_HERSHEY_COMPLEX,2,(0,255,0),2)
                     cv2.imshow("Cropped Face",face)
 
                     if cv2.waitKey(1) == 13 or int(imgID)==30:
