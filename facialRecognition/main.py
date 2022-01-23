@@ -2,7 +2,7 @@
 from tkinter import *
 from tkinter import ttk
 from student import Student
-
+import os
 
 class Face_Recognition_System:
 
@@ -29,11 +29,13 @@ class Face_Recognition_System:
 
         self.trainDatabutton = Button(self.main, text = 'Train Data', width=20, height=3)
         self.trainDatabutton.grid(row = 4,column =2, columnspan=1)
-        self.openPhotos = Button(self.main, text = 'Photos', width=20, height=3)
+        self.openPhotos = Button(self.main, text = 'Photos', command = self.openImage, width=20, height=3)
         self.openPhotos.grid(row =4,column =3, columnspan=1)
         self.quitbutton = Button(self.main, text = 'Quit', width=20, height=3)
         self.quitbutton.grid(row =4,column =4, columnspan=1)
 
+    def openImage(self):
+        os.open('/Users/benjamin/Documents/GitHub/project/facialRecognition/data', os.O_RDONLY)
     # Functions buttons
 
     # Student details button
