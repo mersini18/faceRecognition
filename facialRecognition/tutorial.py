@@ -21,7 +21,7 @@ while True:
     # takes co-ordinates of outline of the 3D face image
     for (x,y,w,h) in faces:
         # creates a rectangle around detected face using rgb colour scheme
-        cv2.rectangle(frame, (x,y), (x+w, y+h), (255,0,0),5)
+        cv2.rectangle(frame, (x,y), (x+w+1, y+h+5), (255,0,0),5)
         # defines an area of interest which is the co-ordinates of where a face is detected
         roiGray = gray[y:y+w, x:x+w]
         roiColor = frame[y:y+h, x:x+w]
@@ -37,8 +37,9 @@ while True:
     # video will run infintely until 'q' is pressed 
     if cv2.waitKey(1)== ord('q'):
         break
-# 
+# releases the camera from the program so it can be used on other applications
 cap.release()
+# destroys the frame window
 cv2.destroyAllWindows()
 
 # # cv2.data.haarcascades + 

@@ -496,38 +496,50 @@ class Student:
 
                 # Load predefined face
 
-                
+                # face classifier
                 faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")                
                 
+                # when camera starts to run, this function will create a cropped frame of users face
                 def faceCropped(frame):
                     gray=cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
-                    faces = faceCascade.detectMultiScale(gray, 1.3, 5)
+                    faces = faceCascade.detectMultiScale(gray, 1.5, 5)
                     # scaling factor = 1.3
                     # minimum neighbor = 5
-
+                    # co-ordinates of the users face will determine the size of the frame outputted
                     for (x,y,w,h) in faces:
                         faceCropped=frame[y:y+h, x:x+w]
                         return faceCropped
                     
                 cap = cv2.VideoCapture(0)
                 imgID = 0
+                # runs infinitely
                 while True:
+                    # frame is the variable used to capture webcam footage
                     ret, frame = cap.read()                        
+                    # if a face is deteced, increase imgID by 1
                     if faceCropped(frame) is not None:
                         imgID +=1
+                    # resize frame image to the cropped frame which was found earlier 
                     face = cv2.resize(faceCropped(frame), (500,500))
                     face = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
-                    filenamePath = "project/facialrecognition/data/user."+str(id)+"."+str(imgID)+".jpg"
+                    # creates a filename
+                    filenamePath = (r"/Users/benjamin/Documents/GitHub/project/facialRecognition/data/user."+str(id)+"."+str(imgID)+".jpg")
+                    # imwrite function called to save the image, with filename and frame passed as parameters
                     cv2.imwrite(filenamePath, face)
+                    # inputs text to screen, an integer reoresenting imgID
                     cv2.putText(face,str(imgID),(50,50),cv2.FONT_HERSHEY_COMPLEX,2,(0,255,0),2)
+                    # show frame to user
                     cv2.imshow("Cropped Face", face)
-
-                    if cv2.waitKey(1) == 13 or int(imgID)==100:
+                    # face recognition will save 100 photos of user before ending
+                    if cv2.waitKey(1) == 13 or int(imgID)==20:
                         break
-                    
+                
+                # turns off camera
                 cap.release()
+                # destroys the windows
                 cv2.destroyAllWindows()
                 
+                # displays success message to user
                 messagebox.showinfo("Result","Generating dataset complete")
 
 
