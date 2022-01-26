@@ -133,8 +133,6 @@ class Student:
         self.studentDOB_entry.grid(row=3,column=1,padx=2,pady=10,sticky=W)
 
         # Radio buttons
-
-        # set as text variable and they dont work!!!!
         
         self.studentPhoto = StringVar()
 
