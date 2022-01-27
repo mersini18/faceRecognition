@@ -64,7 +64,7 @@ class Facerecognition:
             coords = drawBoundary(img, faceCascade,1.1,10,(255,25,255),"Face", clf)
             return img
 
-        faceCascade=cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+        faceCascade=cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
         clf=cv2.face.LBPHFaceRecognizer_create()
         clf.read("Classifier.xml")
 
