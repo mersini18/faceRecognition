@@ -518,7 +518,7 @@ class Student:
                     if faceCropped(frame) is not None:
                         imgID +=1
                     # resize frame image to the cropped frame which was found earlier 
-                    face = cv2.resize(faceCropped(frame), (500,500))
+                    face = cv2.resize(faceCropped(frame), (600,600))
                     face = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
                     # creates a filename
                     filenamePath = (r"/Users/benjamin/Documents/GitHub/project/facialRecognition/data/user."+str(id)+"."+str(imgID)+".jpg")
