@@ -529,7 +529,7 @@ class Student:
                     # show frame to user
                     cv2.imshow("Cropped Face", face)
                     # face recognition will save 100 photos of user before ending
-                    if cv2.waitKey(1) == 13 or int(imgID)==20:
+                    if cv2.waitKey(1) == 13 or int(imgID)==100:
                         break
                 
                 # turns off camera
