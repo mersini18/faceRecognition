@@ -37,7 +37,7 @@ class Face_Recognition_System:
         self.quitbutton.grid(row =4,column =4, columnspan=1)
 
     def openImage(self):
-        os.open(r'/Users/benjamin/Documents/GitHub/project/facialRecognition/data')
+        os.open(r'/Users/benjamin/Documents/GitHub/project/facialRecognition/data', 0)
     # Functions buttons
 
     # Student details button
