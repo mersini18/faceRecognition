@@ -205,7 +205,7 @@ class Create_user:
     
         # Regex for username
         if re.match('^(?![-._])(?!.*[_.-]{2})[\w.-]{4,20}(?<![-._])$', username):
-            specialSym =['$', '@', '#', '%']
+            specialSym =['$', '@', '#', '%', '!']
             val = True
 
             # Success criteria for password

@@ -62,7 +62,7 @@ class Facerecognition:
 
                 # if a program predics a face has been found that matches dataset
                 # will draw a rectangle around face and name it 
-                if confidence > 85:
+                if confidence > 80:
                     cv2.putText(img, f"{resultfName}", (x, y-55), FONT_HERSHEY_COMPLEX, 0.8,(255,255,255),3 )
                     cv2.putText(img, f"{resultlName}", (x, y-30), FONT_HERSHEY_COMPLEX, 0.8,(255,255,255),3 )
                 else:
